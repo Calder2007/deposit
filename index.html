@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0F3D33">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Deposit</title>
+<style>
+:root{--bg:#F2F4EF;--card:#fff;--ink:#12302A;--mut:#5E6B66;--line:#DCE3DE;--g:#0F3D33;--g2:#2F7D62;--w:#E3B220;--bad:#B8412F;--warn:#9A6400;--ok:#2F7D62}
+@media(prefers-color-scheme:dark){:root{--bg:#0C1814;--card:#14241E;--ink:#E6EEE9;--mut:#93A39B;--line:#244036;--g2:#4FB38C;--bad:#E58470;--warn:#E3B220;--ok:#4FB38C}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{padding:16px 16px calc(100px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+h1,h2,h3{margin:0}
+h3{font-size:20px;margin-bottom:12px}
+button{font:inherit;color:inherit;cursor:pointer}
+.hero{background:var(--g);color:#fff;border-radius:22px;padding:20px 20px 18px;margin-bottom:14px}
+.hl{font-size:14px;opacity:.8}
+.hn{font:600 42px/1.1 "Iowan Old Style",Palatino,"Palatino Linotype",Georgia,serif;font-variant-numeric:tabular-nums;margin:4px 0 14px}
+.track{position:relative;height:12px;border-radius:8px;background:rgba(255,255,255,.18)}
+.track i{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:var(--w)}
+.track b{position:absolute;top:-4px;bottom:-4px;width:2px;background:#fff;opacity:.7}
+.hrow{display:flex;justify-content:space-between;font-size:14px;margin-top:10px}
+.heta{font-size:14px;opacity:.85;margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+.ch{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:8px}
+.ch span{color:var(--mut);font-size:14px}
+.big2{font:600 32px/1.1 "Iowan Old Style",Palatino,Georgia,serif;font-variant-numeric:tabular-nums}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.meter{position:relative;height:10px;border-radius:6px;background:var(--line);margin:12px 0 10px}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:var(--g2)}
+.meter i.warn{background:var(--w)}.meter i.bad{background:var(--bad)}
+.meter u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.55}
+p{margin:6px 0}
+.hint{color:var(--mut);font-size:14px}
+.note{border-radius:14px;padding:12px 14px;margin-bottom:14px;background:var(--card);border:1px solid var(--w);font-size:15px}
+.note button{margin-top:8px}
+.btn{border:0;border-radius:12px;padding:12px 16px;background:var(--g);color:#fff;font-weight:600}
+.btn.alt{background:var(--w);color:#2A2200}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:var(--bad);color:#fff}
+.btn.sm{padding:8px 12px;font-size:14px;border-radius:10px}
+.btn.full{width:100%;display:block;margin-top:10px}
+.row{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:11px 0;align-items:center}
+.row:last-child{border-bottom:0}
+.row small{display:block;color:var(--mut);font-size:13px}
+.row b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.tbl td{padding:8px 0;border-bottom:1px solid var(--line)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td:last-child{text-align:right}
+.bar{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:14px}
+.bar span:first-child{flex:0 0 118px}
+.bar .bt{position:relative;flex:1;height:10px;background:var(--line);border-radius:6px}
+.bar .bt i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:var(--g2)}
+.bar .bt u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55}
+.bar span:last-child{flex:0 0 78px;text-align:right;font-variant-numeric:tabular-nums}
+.dayh{font-size:13px;color:var(--mut);margin:14px 0 2px}
+.nav2{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.nav2 button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:20px}
+.nav2 button:disabled{opacity:.35}
+nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav button{background:none;border:0;padding:10px 2px;font-size:13px;color:var(--mut);border-radius:10px}
+nav button.on{color:var(--ink);font-weight:700}
+nav button.on::after{content:"";display:block;height:3px;width:18px;border-radius:2px;background:var(--w);margin:4px auto 0}
+#fab{width:58px;height:58px;border-radius:50%;background:var(--w);color:#2A2200;font-size:32px;line-height:1;margin:-26px auto 0;padding:0;box-shadow:0 4px 14px rgba(0,0,0,.25);font-weight:400}
+#fab::after{display:none}
+#shade{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:8}
+#sheet{position:fixed;left:0;right:0;bottom:0;max-height:92vh;overflow:auto;background:var(--card);border-radius:22px 22px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom));z-index:9;max-width:560px;margin:0 auto}
+#sheet .big{display:block;width:100%;margin:0 0 10px;padding:16px;font-size:17px}
+label{display:block;font-size:14px;color:var(--mut);margin:12px 0 4px}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.thumb{width:100%;max-height:150px;object-fit:cover;border-radius:12px;margin-bottom:6px;border:1px solid var(--line)}
+.err{color:var(--bad);font-size:14px;margin:6px 0}
+.spin{width:34px;height:34px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--g2);animation:sp 0.9s linear infinite;margin:24px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:20;font-size:15px;max-width:90%}
+.items{font-size:13px;color:var(--mut);margin:6px 0;max-height:90px;overflow:auto}
+.sect{margin:22px 0 8px;font-size:18px;font-weight:700}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--w);outline-offset:2px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main id="view"></main>
+<nav>
+  <button data-act="tab" data-tab="home">Home</button>
+  <button data-act="tab" data-tab="spend">Spending</button>
+  <button id="fab" data-act="add" aria-label="Add spending">+</button>
+  <button data-act="tab" data-tab="goals">Goals</button>
+  <button data-act="tab" data-tab="settings">Settings</button>
+</nav>
+<div id="shade" data-act="close" hidden></div>
+<section id="sheet" hidden></section>
+<div id="toast" hidden></div>
+<input type="file" id="fcam" accept="image/*" capture="environment" hidden>
+<input type="file" id="fgal" accept="image/*" multiple hidden>
+<input type="file" id="frest" accept=".json,application/json" hidden>
+
+<script>
+(()=>{
+'use strict';
+const CATS=['Fuel and transport','Food and groceries','Lunches and coffees','Gym and fitness','Subscriptions','Golf and activities','Shopping','Entertainment','Other'];
+const KEY='deposit_app_v1';
+const DAY=864e5;
+const $=s=>document.querySelector(s);
+const DEF=()=>({settings:{geminiKey:'',model:'gemini-2.5-flash',takeHome:2284.77,payAnchor:'2026-11-03',confirmedPayday:false,alloc:{house:1028.15,wallet:137.09,travel:22.85,spend:1096.68},startBal:41884,interest:0,price:830000,target:83000,walletTotal:1250,redirect:true,lastBackup:''},tx:[],house:[],wallet:[],travel:[],logged:[]});
+function load(){const d=DEF();try{const r=JSON.parse(localStorage.getItem(KEY)||'null');if(r){Object.assign(d,r);d.settings=Object.assign(DEF().settings,r.settings);d.settings.alloc=Object.assign(DEF().settings.alloc,(r.settings||{}).alloc)}}catch(e){}return d}
+let S=load();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Could not save. Phone storage may be full.')}}
+let tab='home',pOff=0,queue=[],editing=null;
+
+/* ---------- helpers ---------- */
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const h=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sum=a=>a.reduce((t,x)=>t+(+x.amount||0),0);
+const money=n=>(n<0?'-':'')+'$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});
+const money0=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-AU');
+const toU=s=>Date.parse(s+'T00:00:00Z');
+const iso=ms=>new Date(ms).toISOString().slice(0,10);
+const addDays=(s,n)=>iso(toU(s)+n*DAY);
+const todayStr=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const fd=(s,y)=>new Date(toU(s)).toLocaleDateString('en-AU',Object.assign({day:'numeric',month:'short',timeZone:'UTC'},y?{year:'numeric'}:{}));
+function period(ds){const a=S.settings.payAnchor,idx=Math.floor((toU(ds)-toU(a))/(14*DAY)),start=addDays(a,idx*14);return{idx,start,end:addDays(start,13),next:addDays(start,14)}}
+const periodTx=p=>S.tx.filter(x=>x.date>=p.start&&x.date<=p.end);
+const periodSpend=p=>sum(periodTx(p));
+const houseBal=()=>S.settings.startBal+sum(S.house);
+const walletPaid=()=>sum(S.wallet);
+const walletRem=()=>Math.max(0,S.settings.walletTotal-walletPaid());
+const travelBal=()=>sum(S.travel);
+function firstPay(){const p=period(todayStr());return S.logged.includes(p.start)?p.next:p.start}
+const dateAt=k=>addDays(firstPay(),14*(k-1));
+function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,3200)}
+
+/* ---------- projection ---------- */
+function project(extra){
+  extra=extra||0;const s=S.settings,r=s.interest/100/26;
+  let bal=houseBal(),wr=walletRem(),steps=[bal],kT=bal>=s.target?0:null,kW=wr<=0.005?0:null;
+  for(let k=1;k<=780;k++){
+    const pay=Math.min(s.alloc.wallet,wr);wr-=pay;if(wr<=0.005&&kW==null)kW=k;
+    const c=s.alloc.house+extra+(s.redirect?s.alloc.wallet-pay:0);
+    bal=bal*(1+r)+c;steps.push(bal);
+    if(kT==null&&bal>=s.target)kT=k;
+  }
+  return{steps,kT,kW};
+}
+function weeksSooner(extra){const a=project(0).kT,b=project(extra).kT;if(a==null&&b!=null)return null;if(a==null||b==null||a<=b)return 0;return(a-b)*2}
+function milestones(){const s=S.settings;return[{n:'5% deposit',a:s.price*.05},{n:'Initial $50,000',a:50000},{n:'10% deposit',a:s.price*.10},{n:'20% deposit',a:s.price*.20}].sort((x,y)=>x.a-y.a)}
+function etaFor(amount,pr){if(houseBal()>=amount)return'Reached';const k=pr.steps.findIndex(v=>v>=amount);return k<0?'Not reachable at current contributions':fd(dateAt(k),true)}
+
+/* ---------- insights ---------- */
+function completed(){const t=todayStr(),out=[];for(let i=1;i<=4;i++){const p=period(addDays(t,-14*i));if(periodTx(p).length)out.push({p,spent:periodSpend(p)})}return out}
+function insights(){
+  const t=todayStr(),out=[],bud=S.settings.alloc.spend,c=completed();
+  if(c.length){
+    const avg=c.reduce((x,y)=>x+y.spent,0)/c.length,gap=bud-avg,w=weeksSooner(Math.abs(gap));
+    if(gap>=0)out.push(`Across your last ${c.length} fortnight${c.length>1?'s':''} you averaged ${money0(avg)} against a ${money0(bud)} budget. Putting the ${money0(gap)} gap into the deposit each fortnight${w?` gets you there about ${w} weeks sooner`:''}.`);
+    else out.push(`You are averaging ${money0(avg)} a fortnight against a ${money0(bud)} budget. Getting back to budget would bring the deposit date forward about ${w||0} weeks.`);
+  }
+  const win=S.tx.filter(x=>x.date>=addDays(t,-27)&&x.date<=t);
+  if(win.length){
+    const g={};win.forEach(x=>g[x.cat]=(g[x.cat]||0)+x.amount);
+    const top=Object.entries(g).sort((a,b)=>b[1]-a[1])[0];
+    out.push(`Biggest category over the last 4 weeks is ${top[0]} at ${money0(top[1])}, about ${money0(top[1]/4)} a week.`);
+    const cof=win.filter(x=>x.cat==='Lunches and coffees');
+    if(cof.length>=3){const tot=sum(cof),w2=weeksSooner(tot/4);out.push(`Lunches and coffees: ${cof.length} purchases, ${money0(tot)} in 4 weeks. Halving it frees about ${money0(tot/4)} a fortnight${w2?` and pulls the deposit forward about ${w2} weeks`:''}.`)}
+  }
+  if(!out.length)out.push('Scan a few receipts and tips on where to cut will show up here.');
+  return out;
+}
+
+/* ---------- views ---------- */
+function home(){
+  const s=S.settings,t=todayStr(),p=period(t),a=s.alloc,spent=periodSpend(p),bud=a.spend,left=bud-spent;
+  const elapsed=Math.floor((toU(t)-toU(p.start))/DAY)+1,daysLeft=14-elapsed,expected=bud*elapsed/14;
+  let tone='ok',msg='On track.';
+  if(spent>bud){tone='bad';msg='Over budget by '+money(spent-bud)+'.'}
+  else if(spent>expected*1.15&&spent>bud*.2){tone='warn';msg='Ahead of pace by '+money(spent-expected)+'.'}
+  const bal=houseBal(),pct=Math.max(0,Math.min(100,bal/s.target*100)),pr=project(0);
+  const eta=pr.kT===0?'Target reached.':pr.kT==null?'At current contributions the target is out of reach. Raise your house savings in Settings.':'Forecast to reach it around '+fd(dateAt(pr.kT),true)+'.';
+  let o='';
+  if(!s.confirmedPayday)o+=`<div class="note">Your payday date is a placeholder. Set a real Tuesday payday in Settings so your fortnights line up.<br><button class="btn sm" data-act="tab" data-tab="settings">Open settings</button></div>`;
+  const due=!s.lastBackup?(S.tx.length||S.house.length):(toU(t)-toU(s.lastBackup))/DAY>=7;
+  if(due)o+=`<div class="note">Backup due. One tap saves an Excel file and a restore file to OneDrive or your phone.<br><button class="btn sm" data-act="backup">Back up now</button></div>`;
+  o+=`<section class="hero"><div class="hl">Saved for the deposit</div><div class="hn">${money(bal)}</div>
+  <div class="track"><i style="width:${pct}%"></i>${milestones().filter(m=>m.a<s.target).map(m=>`<b style="left:${m.a/s.target*100}%"></b>`).join('')}</div>
+  <div class="hrow"><span>${pct.toFixed(1)}% of ${money0(s.target)}</span><span>${money0(Math.max(0,s.target-bal))} to go</span></div>
+  <div class="heta">${eta}</div></section>`;
+  const logged=S.logged.includes(p.start);
+  o+=`<section class="card"><div class="ch"><b>This fortnight</b><span>${fd(p.start)} to ${fd(p.end)}</span></div>
+  <div class="big2 ${tone}">${money(Math.abs(left))} ${left>=0?'left':'over'}</div>
+  <div class="meter"><i class="${tone==='ok'?'':tone}" style="width:${Math.min(100,spent/bud*100)}%"></i><u style="left:${elapsed/14*100}%"></u></div>
+  <p>Spent ${money(spent)} of ${money(bud)}. ${daysLeft>0?daysLeft+' days to go.':'Last day.'} <span class="${tone}">${msg}</span></p>
+  <p class="hint">Next payday ${fd(p.next)}. Marker shows where you should be by today.</p>
+  ${logged?`<button class="btn ghost sm" data-act="unlog">Undo this payday log</button>`:`<button class="btn alt full" data-act="logpay">Payday landed? Log my savings</button>`}</section>`;
+  o+=`<section class="card"><div class="ch"><b>Deposit forecast</b><span>Not counted until logged</span></div><table class="tbl">${[6,12,18,24].map(m=>{const n=Math.round(m*26/12),v=pr.steps[n];return`<tr><td>${m} months</td><td>${money0(v)}</td></tr>`}).join('')}</table></section>`;
+  o+=`<section class="card"><div class="ch"><b>Where to cut</b></div>${insights().map(x=>`<p>${h(x)}</p>`).join('')}</section>`;
+  return o;
+}
+
+function spend(){
+  const t=todayStr(),p=period(addDays(t,14*pOff)),bud=S.settings.alloc.spend;
+  const list=periodTx(p).sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id)),total=sum(list);
+  let o=`<div class="nav2"><button data-act="pprev" aria-label="Earlier fortnight">&lsaquo;</button><div style="text-align:center"><b>${fd(p.start)} to ${fd(p.end)}</b><div class="hint">${pOff===0?'This fortnight':pOff===-1?'Last fortnight':Math.abs(pOff)+' fortnights ago'}</div></div><button data-act="pnext" ${pOff>=0?'disabled':''} aria-label="Later fortnight">&rsaquo;</button></div>`;
+  o+=`<section class="card"><div class="big2 ${total>bud?'bad':''}">${money(total)}</div><p class="hint">of ${money(bud)} budget. ${total<=bud?money(bud-total)+' left':money(total-bud)+' over'}.</p></section>`;
+  const g={};list.forEach(x=>g[x.cat]=(g[x.cat]||0)+x.amount);
+  const gs=Object.entries(g).sort((a,b)=>b[1]-a[1]);
+  if(gs.length)o+=`<section class="card"><div class="ch"><b>By category</b></div>${gs.map(([c,v])=>`<div class="bar"><span>${h(c)}</span><span class="bt"><i style="width:${v/gs[0][1]*100}%"></i></span><span>${money0(v)}</span></div>`).join('')}</section>`;
+  const hist=[];for(let i=5;i>=0;i--){const q=period(addDays(t,-14*i));hist.push({q,v:periodSpend(q)})}
+  const mx=Math.max(bud,...hist.map(x=>x.v));
+  o+=`<section class="card"><div class="ch"><b>Last 6 fortnights</b><span>Line is your budget</span></div>${hist.map(x=>`<div class="bar"><span>${fd(x.q.start)}</span><span class="bt"><i style="width:${x.v/mx*100}%;${x.v>bud?'background:var(--bad)':''}"></i><u style="left:${bud/mx*100}%"></u></span><span>${money0(x.v)}</span></div>`).join('')}`;
+  const c=completed();
+  if(c.length)o+=`<p class="hint">Average ${money0(c.reduce((x,y)=>x+y.spent,0)/c.length/2)} a week over your last ${c.length} completed fortnight${c.length>1?'s':''}.</p>`;
+  o+=`</section>`;
+  o+=`<section class="card"><div class="ch"><b>Transactions</b><span>${list.length}</span></div>`;
+  if(!list.length)o+=`<p class="hint">Nothing logged for this fortnight. Tap the plus to scan a receipt.</p>`;
+  let last='';
+  list.forEach(x=>{if(x.date!==last){o+=`<div class="dayh">${new Date(toU(x.date)).toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'short',timeZone:'UTC'})}</div>`;last=x.date}
+    o+=`<button class="row" data-act="edittx" data-id="${x.id}"><span>${h(x.merchant||'No name')}<small>${h(x.cat)}${x.src==='scan'?' (scanned)':''}</small></span><b>${money(x.amount)}</b></button>`});
+  return o+'</section>';
+}
+
+function goals(){
+  const s=S.settings,pr=project(0),bal=houseBal(),wr=walletRem();
+  let o=`<section class="card"><div class="ch"><b>House deposit</b><span>Actual balance</span></div><div class="big2">${money(bal)}</div>
+  <p class="hint">Started at ${money(s.startBal)}. Added since: ${money(sum(S.house))}.</p>
+  <button class="btn sm" data-act="addentry" data-k="house">Add deposit or interest</button>
+  <div class="sect" style="font-size:16px">Milestones</div><table class="tbl">${milestones().map(m=>`<tr><td>${m.n}<br><small class="hint">${money0(m.a)}</small></td><td>${etaFor(m.a,pr)}</td></tr>`).join('')}<tr><td><b>Your target</b><br><small class="hint">${money0(s.target)}</small></td><td><b>${etaFor(s.target,pr)}</b></td></tr></table>
+  ${listRows('house')}</section>`;
+  const wEta=wr<=0.005?'Paid off':pr.kW==null?'Set a repayment amount':'Final payment about '+fd(dateAt(pr.kW),true);
+  o+=`<section class="card"><div class="ch"><b>Mum's wallet</b><span>${wEta}</span></div><div class="big2">${money(wr)} <span class="hint" style="font-size:15px">left</span></div>
+  <p class="hint">Owed ${money(s.walletTotal)}. Paid ${money(walletPaid())}. ${money(s.alloc.wallet)} a fortnight.</p>
+  ${wr>0?`<button class="btn sm" data-act="addentry" data-k="wallet">Mark repayment paid</button>`:'<p class="hint">Done. Your next payday log sends this amount to the house deposit.</p>'}${listRows('wallet')}</section>`;
+  o+=`<section class="card"><div class="ch"><b>Travel savings</b><span>Separate from the deposit</span></div><div class="big2">${money(travelBal())}</div>
+  <button class="btn sm" data-act="addentry" data-k="travel" style="margin-top:8px">Add or withdraw</button>${listRows('travel')}</section>`;
+  return o;
+}
+function listRows(k){
+  const l=[...S[k]].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);
+  if(!l.length)return'';
+  return`<div class="dayh">Recent entries. Tap one to delete it.</div>`+l.map(x=>`<button class="row" data-act="delentry" data-k="${k}" data-id="${x.id}"><span>${h(x.note||x.type||'Entry')}<small>${fd(x.date,true)}</small></span><b>${money(x.amount)}</b></button>`).join('');
+}
+
+function fld(label,path,type,val,extra){return`<label>${label}</label><input data-set="${path}" type="${type}" value="${h(val)}" ${extra||''}>`}
+function settings(){
+  const s=S.settings,a=s.alloc,tot=a.house+a.wallet+a.travel+a.spend,diff=Math.round((s.takeHome-tot)*100)/100;
+  return`<section class="card"><h3>Receipt reader</h3>
+  ${fld('Gemini API key','settings.geminiKey','password',s.geminiKey,'autocomplete="off"')}
+  ${fld('Model','settings.model','text',s.model)}
+  <p class="hint">Get a free key at aistudio.google.com. The key stays on this phone and is never put in backups. Photos go to Google when you scan.</p>
+  <button class="btn sm ghost" data-act="testkey">Test key</button></section>
+  <section class="card"><h3>Pay and budget</h3>
+  ${fld('Take-home per fortnight','settings.takeHome','number',s.takeHome,'step="0.01" inputmode="decimal"')}
+  ${fld('A payday date (any Tuesday you get paid)','settings.payAnchor','date',s.payAnchor)}
+  ${fld('House savings per fortnight','settings.alloc.house','number',a.house,'step="0.01" inputmode="decimal"')}
+  ${fld('Mum wallet repayment per fortnight','settings.alloc.wallet','number',a.wallet,'step="0.01" inputmode="decimal"')}
+  ${fld('Travel savings per fortnight','settings.alloc.travel','number',a.travel,'step="0.01" inputmode="decimal"')}
+  ${fld('Everyday spending per fortnight','settings.alloc.spend','number',a.spend,'step="0.01" inputmode="decimal"')}
+  <p class="${diff===0?'hint':'warn'}">Allocated ${money(tot)} of ${money(s.takeHome)}${diff===0?'.':diff>0?'. '+money(diff)+' unallocated.':'. '+money(-diff)+' over your take-home.'}</p></section>
+  <section class="card"><h3>House goal</h3>
+  ${fld('Starting savings balance','settings.startBal','number',s.startBal,'step="0.01" inputmode="decimal"')}
+  ${fld('Property price estimate','settings.price','number',s.price,'step="1000" inputmode="decimal"')}
+  ${fld('Deposit target','settings.target','number',s.target,'step="500" inputmode="decimal"')}
+  ${fld('Savings interest rate (% a year, for forecasts)','settings.interest','number',s.interest,'step="0.05" inputmode="decimal"')}
+  ${fld('Original amount owed to Mum','settings.walletTotal','number',s.walletTotal,'step="0.01" inputmode="decimal"')}
+  <label style="display:flex;gap:10px;align-items:center"><input type="checkbox" data-set="settings.redirect" ${s.redirect?'checked':''} style="width:auto"> Send the wallet amount to the house once it is paid off</label></section>
+  <section class="card"><h3>Backup</h3>
+  <p class="hint">${s.lastBackup?'Last backup '+fd(s.lastBackup,true)+'.':'No backup yet.'} Back up saves an Excel file plus a restore file. Pick OneDrive in the share menu.</p>
+  <button class="btn full" data-act="backup">Back up now</button>
+  <button class="btn ghost full" data-act="restore">Restore from a backup file</button>
+  <button class="btn danger full" data-act="wipe">Erase everything on this phone</button></section>`;
+}
+
+function render(){
+  document.querySelectorAll('nav [data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+  $('#view').innerHTML=({home,spend,goals,settings}[tab])();
+}
+
+/* ---------- sheets ---------- */
+function sheet(html){$('#sheet').innerHTML=html;$('#sheet').hidden=false;$('#shade').hidden=false;$('#sheet').scrollTop=0}
+function closeSheet(){$('#sheet').hidden=true;$('#shade').hidden=true;queue=[];editing=null}
+function openAdd(){
+  sheet(`<h3>Add spending</h3><button class="btn big" data-act="scancam">Scan a receipt with the camera</button><button class="btn alt big" data-act="scangal">Pick receipt photos</button><button class="btn ghost big" data-act="manual">Enter it without a receipt</button>${S.settings.geminiKey?'':'<p class="hint">Add your Gemini key in Settings and receipts fill themselves in. Until then you can type them in.</p>'}`);
+}
+function txForm(t,o){
+  o=o||{};editing=t;
+  const items=(t.items||[]).filter(i=>i&&i.name);
+  sheet(`<h3>${o.fromQueue?'Check this receipt':t.id?'Edit spending':'Add spending'}</h3>
+  ${o.img?`<img class="thumb" src="${o.img}" alt="Receipt photo">`:''}
+  ${o.err?`<div class="err">${h(o.err)}</div>`:''}
+  <div class="two"><div><label>Amount (AUD)</label><input id="f-amt" type="number" step="0.01" inputmode="decimal" value="${h(t.amount)}"></div><div><label>Date</label><input id="f-date" type="date" value="${h(t.date)}"></div></div>
+  <label>Where</label><input id="f-merch" value="${h(t.merchant)}" autocomplete="off">
+  <label>Category</label><select id="f-cat">${CATS.map(c=>`<option ${c===t.cat?'selected':''}>${c}</option>`).join('')}</select>
+  <label>Note (optional)</label><input id="f-note" value="${h(t.note||'')}">
+  ${items.length?`<div class="items">${items.slice(0,40).map(i=>h(i.name)+(i.price!=null?' '+money(+i.price):'')).join('<br>')}</div>`:''}
+  <button class="btn full" data-act="savetx">Save</button>
+  ${o.fromQueue?'<button class="btn ghost full" data-act="skiptx">Skip this receipt</button>':''}
+  ${t.id?'<button class="btn danger full" data-act="deltx">Delete</button>':''}
+  <button class="btn ghost full" data-act="close">Cancel</button>`);
+  editing._fromQueue=!!o.fromQueue;
+}
+function saveTx(){
+  const amt=parseFloat($('#f-amt').value),date=$('#f-date').value;
+  if(!amt||!date){toast('Add an amount and a date');return}
+  const t=editing,merchant=$('#f-merch').value.trim(),cat=$('#f-cat').value;
+  if(!t.id&&S.tx.some(x=>x.date===date&&Math.abs(x.amount-amt)<.005&&(x.merchant||'').toLowerCase()===merchant.toLowerCase())&&!confirm('This looks like a duplicate of one you already saved. Save it anyway?'))return;
+  const rec={id:t.id||uid(),date,merchant,amount:amt,cat,note:$('#f-note').value.trim(),src:t.src||'manual',items:t.items||[]};
+  if(t.id)S.tx=S.tx.map(x=>x.id===t.id?rec:x);else S.tx.push(rec);
+  save();
+  if(t._fromQueue)nextInQueue();else{closeSheet();render();toast('Saved')}
+}
+function entrySheet(k){
+  const a=S.settings.alloc,types={house:['Deposit','Interest','Withdrawal'],wallet:['Repayment'],travel:['Deposit','Withdrawal']}[k];
+  const def={house:a.house,wallet:Math.min(a.wallet,walletRem()),travel:a.travel}[k];
+  sheet(`<h3>${{house:'House deposit',wallet:'Mum\'s wallet',travel:'Travel savings'}[k]}</h3>
+  <label>Type</label><select id="e-type">${types.map(x=>`<option>${x}</option>`).join('')}</select>
+  <div class="two"><div><label>Amount</label><input id="e-amt" type="number" step="0.01" inputmode="decimal" value="${def.toFixed(2)}"></div><div><label>Date</label><input id="e-date" type="date" value="${todayStr()}"></div></div>
+  <label>Note (optional)</label><input id="e-note">
+  <button class="btn full" data-act="saveentry" data-k="${k}">Save</button><button class="btn ghost full" data-act="close">Cancel</button>`);
+}
+function saveEntry(k){
+  let amt=Math.abs(parseFloat($('#e-amt').value)),type=$('#e-type').value;
+  if(!amt){toast('Add an amount');return}
+  if(type==='Withdrawal')amt=-amt;
+  S[k].push({id:uid(),date:$('#e-date').value||todayStr(),amount:amt,type,note:$('#e-note').value.trim()||type});
+  save();closeSheet();render();toast('Saved');
+}
+function logPay(){
+  const p=period(todayStr()),a=S.settings.alloc,w=Math.min(a.wallet,walletRem()),extra=S.settings.redirect?a.wallet-w:0,hs=a.house+extra;
+  if(!confirm(`Log payday ${fd(p.start)}?\n\nHouse ${money(hs)}\nWallet ${money(w)}\nTravel ${money(a.travel)}\n\nOnly do this once the money has really moved.`))return;
+  const d=todayStr();
+  S.house.push({id:uid(),date:d,amount:hs,type:'Deposit',note:'Payday',payday:p.start});
+  if(w>0)S.wallet.push({id:uid(),date:d,amount:w,type:'Repayment',note:'Payday',payday:p.start});
+  S.travel.push({id:uid(),date:d,amount:a.travel,type:'Deposit',note:'Payday',payday:p.start});
+  S.logged.push(p.start);save();render();toast('Payday logged');
+}
+function unlog(){
+  const p=period(todayStr());if(!confirm('Remove the savings logged for this payday?'))return;
+  ['house','wallet','travel'].forEach(k=>S[k]=S[k].filter(x=>x.payday!==p.start));
+  S.logged=S.logged.filter(x=>x!==p.start);save();render();
+}
+
+/* ---------- receipt scanning ---------- */
+function loadImg(f){return new Promise((res,rej)=>{const u=URL.createObjectURL(f),i=new Image();i.onload=()=>res({i,u});i.onerror=()=>rej(new Error('bad image'));i.src=u})}
+async function prep(f){
+  const{i,u}=await loadImg(f),sc=Math.min(1,2000/Math.max(i.width,i.height)),c=document.createElement('canvas');
+  c.width=Math.round(i.width*sc);c.height=Math.round(i.height*sc);c.getContext('2d').drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);
+  const url=c.toDataURL('image/jpeg',.85);return{url,b64:url.split(',')[1]};
+}
+async function gemini(parts,schema){
+  const s=S.settings,gc={temperature:0};
+  if(schema){gc.responseMimeType='application/json';gc.responseSchema=schema}
+  const res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(s.model||'gemini-2.5-flash')+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':s.geminiKey},body:JSON.stringify({contents:[{parts}],generationConfig:gc})});
+  const j=await res.json();
+  if(!res.ok)throw new Error((j.error&&j.error.message)||('Error '+res.status));
+  const txt=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts&&j.candidates[0].content.parts.map(p=>p.text||'').join('');
+  if(!txt)throw new Error('Empty reply');return txt;
+}
+async function readReceipt(b64){
+  const prompt=`This is a receipt or tax invoice from an Australian shop or service. Dates on it are day/month/year. Return the shop name, the purchase date as YYYY-MM-DD (empty string if you cannot read it), the final total paid in AUD including GST, the best category, and the line items. Category hints: fuel and servos are Fuel and transport; Woolworths, Coles, Aldi and other supermarkets are Food and groceries; cafes, bakeries and takeaway meals are Lunches and coffees; gym memberships are Gym and fitness; Spotify and other recurring plans are Subscriptions. Today is ${todayStr()}.`;
+  const schema={type:'OBJECT',properties:{merchant:{type:'STRING'},date:{type:'STRING'},total:{type:'NUMBER'},category:{type:'STRING',enum:CATS},items:{type:'ARRAY',items:{type:'OBJECT',properties:{name:{type:'STRING'},price:{type:'NUMBER'}}}}},required:['merchant','total','category']};
+  return JSON.parse(await gemini([{text:prompt},{inline_data:{mime_type:'image/jpeg',data:b64}}],schema));
+}
+function okDate(d){if(!/^\d{4}-\d{2}-\d{2}$/.test(d||''))return null;const t=todayStr();return d>addDays(t,1)||d<addDays(t,-400)?null:d}
+async function nextInQueue(){
+  if(!queue.length){closeSheet();render();toast('All receipts done');return}
+  const f=queue.shift();
+  sheet(`<h3>Reading receipt</h3><div class="spin"></div><p class="hint" style="text-align:center">${queue.length?queue.length+' more after this one':'This takes a few seconds'}</p>`);
+  let img=null,d=null,err='';
+  try{img=await prep(f)}catch(e){err='Could not open that photo.'}
+  if(img){
+    if(!S.settings.geminiKey)err='No Gemini key set, so type this one in.';
+    else try{d=await readReceipt(img.b64)}catch(e){err='Could not read it automatically ('+e.message+'). Type it in below.'}
+  }
+  const wasQ=true;
+  txForm({date:okDate(d&&d.date)||todayStr(),merchant:(d&&d.merchant)||'',amount:d&&d.total!=null?d.total:'',cat:d&&CATS.includes(d.category)?d.category:'Other',items:(d&&d.items)||[],src:'scan'},{img:img&&img.url,err,fromQueue:wasQ});
+}
+
+/* ---------- Excel and backup ---------- */
+const crcT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=b=>{let c=-1;for(let i=0;i<b.length;i++)c=crcT[(c^b[i])&255]^(c>>>8);return(c^-1)>>>0};
+function zip(files){
+  const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  const u16=n=>[n&255,(n>>8)&255],u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>>24)&255];
+  files.forEach(f=>{
+    const nm=enc.encode(f.name),d=enc.encode(f.data),crc=crc32(d);
+    const hd=new Uint8Array([...u32(0x04034b50),...u16(20),...u16(0),...u16(0),...u16(0),...u16(0x21),...u32(crc),...u32(d.length),...u32(d.length),...u16(nm.length),...u16(0)]);
+    parts.push(hd,nm,d);cen.push({nm,crc,len:d.length,off});off+=hd.length+nm.length+d.length;
+  });
+  let cdSize=0;
+  cen.forEach(c=>{const e=new Uint8Array([...u32(0x02014b50),...u16(20),...u16(20),...u16(0),...u16(0),...u16(0),...u16(0x21),...u32(c.crc),...u32(c.len),...u32(c.len),...u16(c.nm.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(c.off)]);parts.push(e,c.nm);cdSize+=e.length+c.nm.length});
+  parts.push(new Uint8Array([...u32(0x06054b50),...u16(0),...u16(0),...u16(cen.length),...u16(cen.length),...u32(cdSize),...u32(off),...u16(0)]));
+  return new Blob(parts,{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+}
+const xe=s=>String(s).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,'').replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]));
+function colName(n){let s='';n++;while(n>0){const m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s}
+function sheetXml(rows){
+  let x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols><col min="1" max="8" width="24" customWidth="1"/></cols><sheetData>';
+  rows.forEach((r,ri)=>{x+=`<row r="${ri+1}">`;r.forEach((v,ci)=>{if(v===null||v===undefined||v==='')return;const ref=colName(ci)+(ri+1);
+    if(typeof v==='number')x+=`<c r="${ref}" s="2"><v>${v}</v></c>`;else x+=`<c r="${ref}" t="inlineStr"${ri===0?' s="1"':''}><is><t>${xe(v)}</t></is></c>`});x+='</row>'});
+  return x+'</sheetData></worksheet>';
+}
+function buildXlsx(){
+  const s=S.settings,t=todayStr(),a=s.alloc;
+  const per={};S.tx.forEach(x=>{const p=period(x.date);per[p.start]=p});
+  const sheets=[
+    ['Summary',[['Item','Value'],['Exported',t],['House savings balance',houseBal()],['Starting balance',s.startBal],['Deposit target',s.target],['Remaining to target',Math.max(0,s.target-houseBal())],['Property price estimate',s.price],['Wallet owed',s.walletTotal],['Wallet paid',walletPaid()],['Wallet remaining',walletRem()],['Travel savings balance',travelBal()],['Take-home per fortnight',s.takeHome],['House per fortnight',a.house],['Wallet per fortnight',a.wallet],['Travel per fortnight',a.travel],['Spending per fortnight',a.spend],['Interest rate % a year',s.interest]]],
+    ['Spending',[['Date','Where','Amount','Category','Source','Note'],...[...S.tx].sort((p,q)=>p.date.localeCompare(q.date)).map(x=>[x.date,x.merchant,x.amount,x.cat,x.src,x.note])]],
+    ['Items',[['Date','Where','Item','Price'],...S.tx.flatMap(x=>(x.items||[]).map(i=>[x.date,x.merchant,i.name,typeof i.price==='number'?i.price:'']))]],
+    ['Fortnights',[['Start','End','Spent','Budget','Left over'],...Object.values(per).sort((p,q)=>p.start.localeCompare(q.start)).map(p=>{const v=periodSpend(p);return[p.start,p.end,v,a.spend,a.spend-v]})]],
+    ['House',[['Date','Type','Amount','Note'],...S.house.map(x=>[x.date,x.type,x.amount,x.note])]],
+    ['Wallet',[['Date','Amount','Note'],...S.wallet.map(x=>[x.date,x.amount,x.note])]],
+    ['Travel',[['Date','Type','Amount','Note'],...S.travel.map(x=>[x.date,x.type,x.amount,x.note])]]
+  ];
+  const NS='http://schemas.openxmlformats.org/';
+  const files=[
+    {name:'[Content_Types].xml',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="${NS}package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`},
+    {name:'_rels/.rels',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="${NS}package/2006/relationships"><Relationship Id="rId1" Type="${NS}officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`},
+    {name:'xl/workbook.xml',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="${NS}spreadsheetml/2006/main" xmlns:r="${NS}officeDocument/2006/relationships"><sheets>${sheets.map((x,i)=>`<sheet name="${x[0]}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets></workbook>`},
+    {name:'xl/_rels/workbook.xml.rels',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="${NS}package/2006/relationships">${sheets.map((_,i)=>`<Relationship Id="rId${i+1}" Type="${NS}officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="${NS}officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`},
+    {name:'xl/styles.xml',data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="${NS}spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="4" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs></styleSheet>`},
+    ...sheets.map((x,i)=>({name:`xl/worksheets/sheet${i+1}.xml`,data:sheetXml(x[1])}))
+  ];
+  return zip(files);
+}
+function exportData(){const d=JSON.parse(JSON.stringify(S));delete d.settings.geminiKey;d.version=1;d.exported=todayStr();return d}
+function dl(file){const u=URL.createObjectURL(file),a=document.createElement('a');a.href=u;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)}
+async function backup(){
+  const st=todayStr();
+  const x=new File([buildXlsx()],`Deposit-backup-${st}.xlsx`,{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const j=new File([JSON.stringify(exportData())],`Deposit-restore-${st}.json`,{type:'application/json'});
+  try{
+    if(navigator.canShare&&navigator.canShare({files:[x,j]}))await navigator.share({files:[x,j],title:'Deposit backup'});
+    else{dl(x);dl(j)}
+    S.settings.lastBackup=st;save();render();toast('Backup done');
+  }catch(e){if(e.name!=='AbortError')toast('Backup failed: '+e.message)}
+}
+async function restoreFile(f){
+  try{
+    const d=JSON.parse(await f.text());if(!d||!Array.isArray(d.tx)||!d.settings)throw 0;
+    if(!confirm(`Replace everything on this phone with this backup (${d.tx.length} spending entries)?`))return;
+    const key=S.settings.geminiKey,n=Object.assign(DEF(),d);
+    n.settings=Object.assign(DEF().settings,d.settings,{geminiKey:key});n.settings.alloc=Object.assign(DEF().settings.alloc,d.settings.alloc||{});
+    S=n;save();render();toast('Backup restored');
+  }catch(e){toast('That is not a Deposit restore file')}
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const a=el.dataset.act,k=el.dataset.k,id=el.dataset.id;
+  switch(a){
+    case'tab':tab=el.dataset.tab;pOff=0;render();scrollTo(0,0);break;
+    case'add':openAdd();break;
+    case'close':closeSheet();break;
+    case'scancam':$('#fcam').click();break;
+    case'scangal':$('#fgal').click();break;
+    case'manual':txForm({date:todayStr(),merchant:'',amount:'',cat:CATS[0],items:[],src:'manual'});break;
+    case'savetx':saveTx();break;
+    case'skiptx':nextInQueue();break;
+    case'deltx':if(confirm('Delete this spending entry?')){S.tx=S.tx.filter(x=>x.id!==editing.id);save();closeSheet();render()}break;
+    case'edittx':{const t=S.tx.find(x=>x.id===id);if(t)txForm(Object.assign({},t));break}
+    case'pprev':pOff--;render();break;
+    case'pnext':if(pOff<0){pOff++;render()}break;
+    case'logpay':logPay();break;
+    case'unlog':unlog();break;
+    case'addentry':entrySheet(k);break;
+    case'saveentry':saveEntry(k);break;
+    case'delentry':if(confirm('Delete this entry?')){S[k]=S[k].filter(x=>x.id!==id);save();render()}break;
+    case'backup':backup();break;
+    case'restore':$('#frest').click();break;
+    case'wipe':if(confirm('Erase all spending, savings and settings on this phone? Back up first if you want to keep anything.')&&confirm('Really erase everything?')){const key=S.settings.geminiKey;S=DEF();S.settings.geminiKey=key;save();render();toast('Erased')}break;
+    case'testkey':gemini([{text:'Reply with the single word OK.'}]).then(()=>toast('Key works')).catch(x=>toast('Key failed: '+x.message));break;
+  }
+});
+document.addEventListener('change',e=>{
+  const el=e.target.closest('[data-set]');if(!el)return;
+  const parts=el.dataset.set.split('.');let o=S;for(let i=0;i<parts.length-1;i++)o=o[parts[i]];
+  const last=parts[parts.length-1];
+  o[last]=el.type==='checkbox'?el.checked:el.type==='number'?(parseFloat(el.value)||0):el.value;
+  if(el.dataset.set==='settings.payAnchor')S.settings.confirmedPayday=true;
+  save();
+});
+['fcam','fgal'].forEach(id=>$('#'+id).addEventListener('change',e=>{queue=[...e.target.files];e.target.value='';if(queue.length)nextInQueue()}));
+$('#frest').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(f)restoreFile(f)});
+
+render();
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+window.__app={get S(){return S},buildXlsx,project,period,render,insights,exportData};
+})();
+</script>
+</body>
+</html>
